@@ -1,0 +1,19 @@
+1. make sure python is right
+> which python
+
+2. set LD_LIBRARY_PATH
+> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.161-0.b14.el7_4.x86_64/jre/lib/amd64/server/
+
+3. build model offline (do this once)
+jupyter notebook
+IoT_Pred_Main_Data_Exploration_Model_Training.py
+
+4. Run producer
+python IoT_Pred_Main_Producer.py
+
+5. Run consumer
+python IoT_Pred_Main_Consumer.py
+
+6. go to plotly
+https://plot.ly/organize/home/
+
