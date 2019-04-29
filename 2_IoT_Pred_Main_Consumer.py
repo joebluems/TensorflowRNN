@@ -20,7 +20,7 @@ print("Import complete.\n")
 
 def sensor_conversion(record):
     sensor_frame = pd.DataFrame()
-    sensor_frame = sensor_frame.append(record,ignore_index=True)
+    sensor_frame = sensor_frame.append(record,ignore_index=True,sort=True)
     sensor_frame['TimeStamp']= pd.to_datetime(sensor_frame['TimeStamp'])#.dt.strftime('%Y-%m-%d %H:%M:%S.%f')
     sensor_frame.sort_values(['TimeStamp'], ascending=True)
     sensor_frame['Total']=sensor_frame.select_dtypes(include=['float64','float32']).apply(lambda row: np.sum(row),axis=1)
@@ -61,7 +61,7 @@ def rnn_model(array, num_periods):
     saver = tf.train.Saver()                      #specify saver function                
 
     with tf.Session() as sess:                    #start a new tensorflow session
-        saver.restore(sess, os.path.join(DIR,"IoT_TF_model-1000"))    #restore model         
+        saver.restore(sess, os.path.join(DIR,"RWsensorTFmodel-100"))    #restore model         
         y_pred = sess.run(outputs, feed_dict={X: x_data})      #load data from streams
         FORECAST = y_pred[:,(num_periods-1):num_periods]       #only print out the last prediction, which is the forecast for next period
     return (FORECAST)
@@ -84,7 +84,7 @@ while True:
       if not msg.error():
           t = t + 1
           sensor_timestamp = json.loads(msg.value().decode('utf-8'))
-          df = df.append(sensor_conversion(sensor_timestamp))
+          df = df.append(sensor_conversion(sensor_timestamp),sort=True)
           df['TimePeriod'] = t
           if len(df) < num_periods:
               total_list_for_RNN.append((df["Total"].iloc[-1]))

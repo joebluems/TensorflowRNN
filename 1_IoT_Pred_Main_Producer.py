@@ -1,4 +1,4 @@
-pint ("Importing dependencies....")
+print ("Importing dependencies....")
 #import mapr_kafka_rest
 from confluent_kafka import Producer
 import random
