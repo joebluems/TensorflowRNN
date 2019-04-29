@@ -9,13 +9,16 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import json
 import glob
-print("Import complete.\n")
+import sys
 
 
 # Set up some reusable values
 #sensor_topic_name  = '/iot_stream:sensor_record'
 path = './test'   #local path, not hadoop fs path
-p = Producer({'streams.producer.default.stream': '/user/mapr/iot_stream'})  #hadoop fs path
+stream = '/user/mapr/iot_stream'
+if len(sys.argv)==2: stream=sys.argv[1]
+
+p = Producer({'streams.producer.default.stream': stream})  #hadoop fs path
 
 def xml2df(xml_file):
     root = ET.XML(xml_file) # element tree
