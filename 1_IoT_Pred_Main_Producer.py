@@ -1,6 +1,6 @@
-print ("Importing dependencies....")
+pint ("Importing dependencies....")
 #import mapr_kafka_rest
-from mapr_streams_python import Producer
+from confluent_kafka import Producer
 import random
 import time
 import datetime
@@ -14,7 +14,7 @@ print("Import complete.\n")
 
 # Set up some reusable values
 #sensor_topic_name  = '/iot_stream:sensor_record'
-path = '/user/mapr/test'   #local path, not hadoop fs path
+path = './test'   #local path, not hadoop fs path
 p = Producer({'streams.producer.default.stream': '/user/mapr/iot_stream'})  #hadoop fs path
 
 def xml2df(xml_file):
@@ -29,7 +29,6 @@ def xml2df(xml_file):
 
 records = 0
 for xml_filename in glob.glob(path+"/*.xml"):
-#for xml_filename in glob.glob(path+"/2016_1_0_12_20160722_1437048553.xml"):
     f = open(xml_filename, 'rb').read()
     df = xml2df(f).drop_duplicates().reset_index(drop=True).sort_values(['TimeStamp'], ascending=True)
     df['TagValue']=df.TagValue.astype(float).fillna(0)
@@ -76,7 +75,6 @@ for xml_filename in glob.glob(path+"/*.xml"):
 
         record = json.dumps(sensor_df_record)
         p.produce('sensor_record',record)
-        #response = mapr_kafka_rest.post_topic_message(sensor_topic_name, sensor_df_record)
         print("POSTED: " + str(sensor_df_record))
         time.sleep(0.25)
 
