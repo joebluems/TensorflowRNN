@@ -24,6 +24,6 @@ First, pull the code and work through the jupyter notebook that trains the model
 - maprcli stream topic create -path /user/**your_user**/iot_stream -topic sensor_record
 
 ### Start the producer and then Consumer in two terminals...
-- In window #1: python 1_IoT_Pred_Main_Producer.py
-- In window #2: python 2_IoT_Pred_Main_Consumer.py 
+- In window #1: python 1_IoT_Pred_Main_Producer.py /user/**your_user**/iot_stream
+- In window #2: python 2_IoT_Pred_Main_Consumer.py /user/**your_user**/iot_stream:sensor_record
 - After the consumer hits 100 records ingested, you should start to see predicted values...
