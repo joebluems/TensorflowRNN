@@ -1,24 +1,28 @@
 # TensorflowRNN
-This is 
-
-Note: based on the original blog by Justin Brandenburg: 
+This is a brief demo to illustrate the process of building a "simple" RNN in Tensorflow, then deploying that in real-time using MapR Stream (python client).
+<br>
+Note - this is based on the original blog by Justin Brandenburg: https://mapr.com/blog/streaming-predictive-maintenance-for-iot-using-tensorflow-part-1/
 
 ## Requirements
-python3, jupyter
-pip install tensorflow pandas numpy matplotlib mapr_streams_python
+- MapR: Version 6.1
+- install mapr-kafka-rest & mapr-librdkafka
+- Python: 3.6.3 and ... matplotlib, pandas, tensorflow, mapr_streams_python
+- Installation of mapr_streams_python may require use of global options...
  
-## Process
+## Setup
+First, pull the code and work through the jupyter notebook that trains the model. Then, create a MapR stream & topic so you can produce data and score the model in the consuemr.
 ### Clone the repo and build the model
-export LD_LIBRARY_PATH=/opt/mapr/lib:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-0.el7_6.x86_64/jre/lib/amd64/server/:/opt/mapr/include
-cd /mapr/<cluster_name>/user/<user>
-git clone https://github.com/joebluems/TensorflowRNN.git
-cd TensorflowRNN
-jupyter notebook
-
-As you browse through the notebook running the commands, you will save your TF model.
+- cd /mapr/<cluster_name>/user/<user>
+- git clone https://github.com/joebluems/TensorflowRNN.git
+- cd TensorflowRNN
+- jupyter notebook (play each cell)
+- output should go to the folder ./rwTFmodel
 
 ### Implement the Model with MapR Streams
-maprcli stream create -path /user/<user>/iot_stream -produceperm p -consumeperm p -topicperm p
-maprcli stream topic create -path /user/<user>/iot_stream -topic sensor_record
+- maprcli stream create -path /user/<user>/iot_stream -produceperm p -consumeperm p -topicperm p
+- maprcli stream topic create -path /user/<user>/iot_stream -topic sensor_record
 
-
+### Start the producer and then Consumer in two terminals...
+- In window #1: python 1_IoT_Pred_Main_Producer.py
+- In window #2: python 2_IoT_Pred_Main_Consumer.py 
+- After the consumer hits 100 records ingested, you should start to see predicted values...
