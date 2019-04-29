@@ -16,7 +16,10 @@ from tensorflow.contrib.learn.python.learn import learn_runner
 import tensorflow.contrib.metrics as metrics
 import tensorflow.contrib.rnn as rnn
 import datetime
-print("Import complete.\n")
+import sys
+
+stream = '/user/mapr/iot_stream:sensor_record'
+if len(sys.argv)==2: stream=sys.argv[1]
 
 def sensor_conversion(record):
     sensor_frame = pd.DataFrame()
@@ -68,7 +71,7 @@ def rnn_model(array, num_periods):
 
 
 c = Consumer({'group.id': 'mygroup','default.topic.config': {'auto.offset.reset': 'earliest'}})
-c.subscribe(['/user/mapr/iot_stream:sensor_record'])
+c.subscribe([stream])
 DIR="./rwTFmodel/"
 
 while True:
